@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Moby - Plataforma Imobiliária com IA
 
-## Getting Started
+Visualização interativa dos fluxos e arquitetura da plataforma Moby usando diagramas Mermaid.
 
-First, run the development server:
+## 🚀 Funcionalidades
+
+- **Jornada do Lead**: Fluxo completo desde o primeiro contato até a conversão
+- **Arquitetura Técnica**: Stack tecnológico e integrações da plataforma
+- **Mapa Mental**: Visão completa das funcionalidades do produto
+
+## 🛠️ Tecnologias
+
+- Next.js 15
+- React 19
+- TypeScript
+- Tailwind CSS
+- Mermaid.js
+
+## 📦 Instalação
+
+```bash
+npm install
+```
+
+## 🔧 Desenvolvimento
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Acesse [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🏗️ Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+```
 
-## Learn More
+## 🚀 Deploy na Vercel
 
-To learn more about Next.js, take a look at the following resources:
+### Método 1: Deploy via Vercel CLI
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm i -g vercel
+vercel
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Método 2: Deploy via GitHub
 
-## Deploy on Vercel
+1. Faça push do código para o GitHub
+2. Importe o projeto no [Vercel](https://vercel.com/new)
+3. Configure as seguintes secrets no GitHub:
+   - `VERCEL_TOKEN`: Token da Vercel (gere em https://vercel.com/account/tokens)
+   - `VERCEL_ORG_ID`: ID da organização (encontre em .vercel/project.json após primeiro deploy)
+   - `VERCEL_PROJECT_ID`: ID do projeto (encontre em .vercel/project.json após primeiro deploy)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📝 Licença
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+© 2025 Moby - Revolucionando o atendimento imobiliário com Inteligência Artificial
