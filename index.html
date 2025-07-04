@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moby - Plataforma Imobiliária com IA</title>
+    <meta name="description" content="Visualização interativa da plataforma Moby - Sistema completo de gestão imobiliária com inteligência artificial">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/public/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/public/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/apple-touch-icon.png">
+    <link rel="manifest" href="/public/manifest.json">
+    
+    <!-- Mermaid.js -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    
+    <!-- React -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        #root {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: #1a1a1a;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .nav-button {
+            background: #2a2a2a;
+            color: #e0e0e0;
+            border: 1px solid #444;
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .nav-button:hover {
+            background: #3a3a3a;
+            border-color: #667eea;
+            transform: translateY(-1px);
+        }
+
+        .nav-button.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .diagram-container {
+            flex: 1;
+            overflow: auto;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #0a0a0a 100%);
+        }
+
+        .mermaid {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 0.5rem;
+            z-index: 100;
+        }
+
+        .control-button {
+            background: rgba(42, 42, 42, 0.9);
+            color: #e0e0e0;
+            border: 1px solid #444;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .control-button:hover {
+            background: rgba(58, 58, 58, 0.9);
+            border-color: #667eea;
+            transform: scale(1.05);
+        }
+
+        .info-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(26, 26, 26, 0.95);
+            border: 1px solid #444;
+            border-radius: 1rem;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            z-index: 200;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        .info-panel h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+
+        .info-panel p {
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            color: #b0b0b0;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: transparent;
+            border: none;
+            color: #666;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close-button:hover {
+            color: #e0e0e0;
+        }
+
+        /* Tema Mermaid customizado */
+        .mermaid .node rect,
+        .mermaid .node circle,
+        .mermaid .node ellipse,
+        .mermaid .node polygon {
+            fill: #2a2a2a !important;
+            stroke: #667eea !important;
+            stroke-width: 2px !important;
+        }
+
+        .mermaid .node .label {
+            color: #e0e0e0 !important;
+        }
+
+        .mermaid .edgePath .path {
+            stroke: #444 !important;
+            stroke-width: 2px !important;
+        }
+
+        .mermaid .edgeLabel {
+            background-color: #1a1a1a !important;
+            color: #b0b0b0 !important;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .header {
+                padding: 0.75rem 1rem;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            .nav-button {
+                padding: 0.4rem 1rem;
+                font-size: 0.8rem;
+            }
+
+            .controls {
+                bottom: 1rem;
+                right: 1rem;
+            }
+
+            .diagram-container {
+                padding: 1rem;
+            }
+        }
+
+        /* Animações */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* Modo apresentação */
+        .presentation-mode {
+            cursor: none;
+        }
+
+        .presentation-mode .header,
+        .presentation-mode .controls {
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .presentation-mode:hover .header,
+        .presentation-mode:hover .controls {
+            opacity: 1;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            font-size: 1.2rem;
+            color: #667eea;
+        }
+
+        .loading::after {
+            content: '...';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: ''; }
+            40% { content: '.'; }
+            60% { content: '..'; }
+            80%, 100% { content: '...'; }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const diagrams = {
+            journey: {
+                title: 'Jornada do Lead',
+                diagram: `graph LR
+    A[Lead] -->|WhatsApp/Instagram| B[IA Atende 24/7]
+    B -->|Qualificação| C{Lead Qualificado?}
+    C -->|Sim| D[CRM Automático]
+    C -->|Não| E[Nurturing IA]
+    D --> F[Agendamento Visita]
+    E -->|Reengajamento| B
+    F --> G[Acompanhamento IA]
+    G --> H[Proposta]
+    H --> I[Negociação]
+    I --> J[Venda Concluída]
+    
+    style A fill:#667eea,stroke:#fff,stroke-width:2px,color:#fff
+    style J fill:#10b981,stroke:#fff,stroke-width:2px,color:#fff
+    style B fill:#3b82f6,stroke:#fff,stroke-width:2px,color:#fff`
+            },
+            architecture: {
+                title: 'Arquitetura Técnica',
+                diagram: `graph TB
+    subgraph Frontend
+        A[Next.js 14] --> B[React 18]
+        B --> C[TailwindCSS]
+        B --> D[TypeScript]
+    end
+    
+    subgraph Backend
+        E[Supabase] --> F[PostgreSQL]
+        E --> G[Auth]
+        E --> H[Realtime]
+        I[OpenAI API] --> J[GPT-4]
+        I --> K[Embeddings]
+    end
+    
+    subgraph Integrações
+        L[WhatsApp Business API]
+        M[Instagram API]
+        N[Facebook API]
+        O[WebChat Custom]
+    end
+    
+    Frontend --> Backend
+    Backend --> Integrações
+    
+    style A fill:#667eea,stroke:#fff,stroke-width:2px,color:#fff
+    style E fill:#3b82f6,stroke:#fff,stroke-width:2px,color:#fff
+    style I fill:#10b981,stroke:#fff,stroke-width:2px,color:#fff`
+            },
+            features: {
+                title: 'Mapa de Funcionalidades',
+                diagram: `mindmap
+  root((Moby IA))
+    Atendimento
+      IA 24/7
+      Multi-idiomas
+      Personalização
+      Contexto Histórico
+    Qualificação
+      Score Automático
+      Perfil Comportamental
+      Intenção de Compra
+      Timeline Decisão
+    CRM Inteligente
+      Pipeline Visual
+      Automações
+      Relatórios IA
+      Previsões
+    Integrações
+      WhatsApp
+      Instagram
+      Facebook
+      WebChat
+      E-mail
+      SMS
+    Analytics
+      Dashboards
+      KPIs Tempo Real
+      ROI Campanhas
+      Insights IA`
+            }
+        };
+
+        function App() {
+            const [activeView, setActiveView] = useState('journey');
+            const [showInfo, setShowInfo] = useState(false);
+            const [isLoading, setIsLoading] = useState(true);
+            const [presentationMode, setPresentationMode] = useState(false);
+            const [zoom, setZoom] = useState(1);
+
+            useEffect(() => {
+                // Configurar Mermaid
+                mermaid.initialize({
+                    theme: 'dark',
+                    themeVariables: {
+                        darkMode: true,
+                        background: '#1a1a1a',
+                        primaryColor: '#667eea',
+                        primaryTextColor: '#e0e0e0',
+                        primaryBorderColor: '#667eea',
+                        lineColor: '#444',
+                        secondaryColor: '#3b82f6',
+                        tertiaryColor: '#10b981',
+                        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+                    },
+                    flowchart: {
+                        curve: 'basis',
+                        nodeSpacing: 100,
+                        rankSpacing: 50
+                    },
+                    mindmap: {
+                        useMaxWidth: true,
+                        padding: 20
+                    }
+                });
+
+                // Renderizar diagrama inicial
+                renderDiagram();
+            }, []);
+
+            useEffect(() => {
+                renderDiagram();
+            }, [activeView, zoom]);
+
+            const renderDiagram = async () => {
+                setIsLoading(true);
+                const element = document.getElementById('mermaid-diagram');
+                if (element) {
+                    element.innerHTML = diagrams[activeView].diagram;
+                    element.removeAttribute('data-processed');
+                    try {
+                        await mermaid.run();
+                        // Aplicar zoom
+                        const svg = element.querySelector('svg');
+                        if (svg) {
+                            svg.style.transform = `scale(${zoom})`;
+                            svg.style.transformOrigin = 'center';
+                        }
+                    } catch (error) {
+                        console.error('Erro ao renderizar diagrama:', error);
+                    }
+                }
+                setIsLoading(false);
+            };
+
+            const handleZoomIn = () => setZoom(prev => Math.min(prev + 0.1, 2));
+            const handleZoomOut = () => setZoom(prev => Math.max(prev - 0.1, 0.5));
+            const handleZoomReset = () => setZoom(1);
+
+            const togglePresentationMode = () => {
+                setPresentationMode(!presentationMode);
+                if (!presentationMode) {
+                    document.documentElement.requestFullscreen();
+                } else {
+                    document.exitFullscreen();
+                }
+            };
+
+            const handleKeyPress = (e) => {
+                if (e.key === 'Escape' && presentationMode) {
+                    setPresentationMode(false);
+                }
+                if (e.key === 'ArrowRight') {
+                    const views = Object.keys(diagrams);
+                    const currentIndex = views.indexOf(activeView);
+                    const nextIndex = (currentIndex + 1) % views.length;
+                    setActiveView(views[nextIndex]);
+                }
+                if (e.key === 'ArrowLeft') {
+                    const views = Object.keys(diagrams);
+                    const currentIndex = views.indexOf(activeView);
+                    const prevIndex = (currentIndex - 1 + views.length) % views.length;
+                    setActiveView(views[prevIndex]);
+                }
+            };
+
+            useEffect(() => {
+                window.addEventListener('keydown', handleKeyPress);
+                return () => window.removeEventListener('keydown', handleKeyPress);
+            }, [activeView, presentationMode]);
+
+            return (
+                <div className={presentationMode ? 'presentation-mode' : ''}>
+                    <header className="header">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                            <img src="/public/logo.png" alt="Moby" style={{ height: '40px', width: 'auto' }} />
+                            <h1 className="logo">Moby IA</h1>
+                        </div>
+                        <nav className="nav-buttons">
+                            {Object.entries(diagrams).map(([key, value]) => (
+                                <button
+                                    key={key}
+                                    className={`nav-button ${activeView === key ? 'active' : ''}`}
+                                    onClick={() => setActiveView(key)}
+                                >
+                                    {value.title}
+                                </button>
+                            ))}
+                        </nav>
+                    </header>
+
+                    <main className="diagram-container">
+                        {isLoading ? (
+                            <div className="loading">Carregando diagrama</div>
+                        ) : (
+                            <div id="mermaid-diagram" className="mermaid fade-in"></div>
+                        )}
+                    </main>
+
+                    <div className="controls">
+                        <button className="control-button" onClick={handleZoomOut} title="Diminuir zoom">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
+                                <path fillRule="evenodd" d="M5 8a1 1 0 011-1h4a1 1 0 110 2H6a1 1 0 01-1-1z" clipRule="evenodd" />
+                            </svg>
+                        </button>
+                        <button className="control-button" onClick={handleZoomReset} title="Resetar zoom">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
+                            </svg>
+                        </button>
+                        <button className="control-button" onClick={handleZoomIn} title="Aumentar zoom">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
+                                <path fillRule="evenodd" d="M8 6a1 1 0 011 1v1h1a1 1 0 110 2H9v1a1 1 0 11-2 0V9H6a1 1 0 110-2h1V7a1 1 0 011-1z" clipRule="evenodd" />
+                            </svg>
+                        </button>
+                        <button className="control-button" onClick={togglePresentationMode} title="Modo apresentação">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
+                            </svg>
+                        </button>
+                        <button className="control-button" onClick={() => setShowInfo(true)} title="Informações">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    {showInfo && (
+                        <div className="info-panel fade-in">
+                            <button className="close-button" onClick={() => setShowInfo(false)}>×</button>
+                            <h2>Sobre o Moby IA</h2>
+                            <p>
+                                O Moby é uma plataforma revolucionária de gestão imobiliária que utiliza 
+                                inteligência artificial para transformar o processo de vendas.
+                            </p>
+                            <p>
+                                <strong>Principais recursos:</strong>
+                            </p>
+                            <ul style={{ marginLeft: '1.5rem', marginBottom: '1rem' }}>
+                                <li>Atendimento automatizado 24/7</li>
+                                <li>Qualificação inteligente de leads</li>
+                                <li>CRM com automações avançadas</li>
+                                <li>Integração omnichannel</li>
+                                <li>Analytics em tempo real</li>
+                            </ul>
+                            <p>
+                                <strong>Navegação:</strong> Use as setas do teclado para navegar entre os diagramas 
+                                no modo apresentação. Pressione ESC para sair do modo tela cheia.
+                            </p>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>

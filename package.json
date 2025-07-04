@@ -1,0 +1,23 @@
+{
+  "name": "moby-mermaid-mapamental",
+  "version": "1.0.0",
+  "description": "Visualização interativa da plataforma Moby com Mermaid.js",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx http-server . -p 3000 -o",
+    "build": "echo 'No build required for static HTML'",
+    "preview": "npx http-server . -p 3000"
+  },
+  "keywords": [
+    "mermaid",
+    "diagrams",
+    "moby",
+    "imobiliaria",
+    "ia"
+  ],
+  "author": "Moby Team",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

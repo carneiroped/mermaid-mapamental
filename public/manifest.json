@@ -1,0 +1,28 @@
+{
+  "name": "Moby - Plataforma Imobiliária com IA",
+  "short_name": "Moby IA",
+  "description": "Sistema completo de gestão imobiliária com inteligência artificial",
+  "icons": [
+    {
+      "src": "/public/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/public/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/public/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#667eea",
+  "background_color": "#0a0a0a",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "start_url": "/",
+  "scope": "/"
+}
