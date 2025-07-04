@@ -341,35 +341,46 @@
             },
             features: {
                 title: 'Mapa de Funcionalidades',
-                diagram: `mindmap
-  root((Moby IA))
-    Atendimento
-      IA 24/7
-      Multi-idiomas
-      Personalização
-      Contexto Histórico
-    Qualificação
-      Score Automático
-      Perfil Comportamental
-      Intenção de Compra
-      Timeline Decisão
-    CRM Inteligente
-      Pipeline Visual
-      Automações
-      Relatórios IA
-      Previsões
-    Integrações
-      WhatsApp
-      Instagram
-      Facebook
-      WebChat
-      E-mail
-      SMS
-    Analytics
-      Dashboards
-      KPIs Tempo Real
-      ROI Campanhas
-      Insights IA`
+                diagram: `graph TD
+    A[Moby IA] --> B[Atendimento]
+    A --> C[Qualificação]
+    A --> D[CRM Inteligente]
+    A --> E[Integrações]
+    A --> F[Analytics]
+    
+    B --> B1[IA 24/7]
+    B --> B2[Multi-idiomas]
+    B --> B3[Personalização]
+    B --> B4[Contexto Histórico]
+    
+    C --> C1[Score Automático]
+    C --> C2[Perfil Comportamental]
+    C --> C3[Intenção de Compra]
+    C --> C4[Timeline Decisão]
+    
+    D --> D1[Pipeline Visual]
+    D --> D2[Automações]
+    D --> D3[Relatórios IA]
+    D --> D4[Previsões]
+    
+    E --> E1[WhatsApp]
+    E --> E2[Instagram]
+    E --> E3[Facebook]
+    E --> E4[WebChat]
+    E --> E5[E-mail]
+    E --> E6[SMS]
+    
+    F --> F1[Dashboards]
+    F --> F2[KPIs Tempo Real]
+    F --> F3[ROI Campanhas]
+    F --> F4[Insights IA]
+    
+    style A fill:#667eea,stroke:#fff,stroke-width:3px,color:#fff
+    style B fill:#3b82f6,stroke:#fff,stroke-width:2px,color:#fff
+    style C fill:#10b981,stroke:#fff,stroke-width:2px,color:#fff
+    style D fill:#f59e0b,stroke:#fff,stroke-width:2px,color:#fff
+    style E fill:#ef4444,stroke:#fff,stroke-width:2px,color:#fff
+    style F fill:#8b5cf6,stroke:#fff,stroke-width:2px,color:#fff`
             }
         };
 
